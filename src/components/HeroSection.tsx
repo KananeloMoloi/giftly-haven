@@ -17,15 +17,19 @@ const HeroSection: React.FC = () => {
 
   return (
     <div className="relative h-screen">
-      {/* Fixed background that fades on scroll */}
+      {/* Fixed background with animation */}
       <div className="fixed inset-0 -z-10" style={{ opacity }}>
-        <img
-          src={heroImage}
-          alt="Premium gift boxes"
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
-        />
+        <div className="absolute inset-0 animate-hero-zoom">
+          <img
+            src={heroImage}
+            alt="Premium gift boxes"
+            className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
+          />
+        </div>
+        {/* Animated shimmer overlay */}
+        <div className="absolute inset-0 animate-hero-shimmer bg-gradient-to-r from-transparent via-gold/5 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 via-foreground/40 to-foreground/80" />
       </div>
 
