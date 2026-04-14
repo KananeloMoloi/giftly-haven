@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
-      <div className="bg-nav/95 backdrop-blur-md rounded-full px-6 py-3 flex items-center justify-between shadow-lg border border-gold/20">
+      <div className="bg-charcoal backdrop-blur-md rounded-full px-6 py-3 flex items-center justify-between shadow-lg border border-gold/20">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <img src={logo} alt="GiftBox" className="h-8 w-8" />
@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden mt-2 bg-nav/95 backdrop-blur-md rounded-2xl px-6 py-4 shadow-lg border border-gold/20">
+        <div className="md:hidden mt-2 bg-charcoal backdrop-blur-md rounded-2xl px-6 py-4 shadow-lg border border-gold/20">
           {navLinks.map(link => (
             <Link
               key={link.to}

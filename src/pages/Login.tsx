@@ -15,9 +15,14 @@ const Login: React.FC = () => {
 
   return (
     <Layout>
-      <div className="pt-24 pb-16 bg-background min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-md px-6">
-          <div className="bg-card rounded-xl border border-border p-8">
+      <div className="pt-24 pb-16 min-h-screen flex items-center justify-center relative overflow-hidden">
+        {/* Decorative background */}
+        <div className="absolute inset-0 bg-charcoal" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-gold/10 blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-gold/5 blur-[100px]" />
+
+        <div className="w-full max-w-md px-6 relative z-10">
+          <div className="bg-card/90 backdrop-blur-sm rounded-xl border border-border p-8 shadow-2xl">
             <h1 className="font-display text-2xl font-bold text-center mb-6">Welcome Back</h1>
 
             <form onSubmit={handleSubmit} className="space-y-4">
