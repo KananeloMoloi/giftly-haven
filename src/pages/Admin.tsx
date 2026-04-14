@@ -252,13 +252,13 @@ const Admin: React.FC = () => {
         <div className="flex gap-2 mb-8">
           <button
             onClick={() => setTab('orders')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${tab === 'orders' ? 'bg-gold text-primary-foreground' : 'bg-card border border-border hover:border-gold/40'}`}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${tab === 'orders' ? 'bg-emerald-500 text-white' : 'bg-slate-800 border border-slate-700 text-slate-300 hover:border-emerald-500/40'}`}
           >
             Orders
           </button>
           <button
             onClick={() => setTab('products')}
-            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${tab === 'products' ? 'bg-gold text-primary-foreground' : 'bg-card border border-border hover:border-gold/40'}`}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${tab === 'products' ? 'bg-emerald-500 text-white' : 'bg-slate-800 border border-slate-700 text-slate-300 hover:border-emerald-500/40'}`}
           >
             Products ({products.length})
           </button>
@@ -267,7 +267,7 @@ const Admin: React.FC = () => {
         {/* ======== ORDERS TAB ======== */}
         {tab === 'orders' && (
           <div className="space-y-4">
-            <h2 className="font-display text-2xl font-bold mb-4">Recent Orders</h2>
+            <h2 className="font-display text-2xl font-bold mb-4 text-white">Recent Orders</h2>
             {orders.map(order => {
               const isExpanded = expandedOrder === order.id;
               const stageIdx = getStageIndex(order.status);
