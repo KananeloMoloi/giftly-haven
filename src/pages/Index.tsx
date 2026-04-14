@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
 import ProductCard from '@/components/ProductCard';
-import { products, categoryInfo } from '@/data/products';
+import { categoryInfo } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
 
 const Index: React.FC = () => {
+  const { products } = useProducts();
   const featured = products.slice(0, 6);
 
   return (
