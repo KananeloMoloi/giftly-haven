@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
@@ -7,7 +7,20 @@ import logo from '@/assets/logo.png';
 const Navbar: React.FC = () => {
   const { totalItems } = useCart();
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const isHome = location.pathname === '/';
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Transparent on home hero, solid everywhere else or on scroll
+  const solid = !isHome || scrolled;
 
   const navLinks = [
     { to: '/', label: 'Home' },
@@ -19,7 +32,11 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
-      <div className="bg-charcoal backdrop-blur-md rounded-full px-6 py-3 flex items-center justify-between shadow-lg border border-gold/20">
+      <div className={`backdrop-blur-md rounded-full px-6 py-3 flex items-center justify-between shadow-lg border transition-colors duration-300 ${
+        solid
+          ? 'bg-charcoal border-gold/20'
+          : 'bg-nav/30 border-white/10'
+      }`}>
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
           <img src={logo} alt="GiftBox" className="h-8 w-8" />
