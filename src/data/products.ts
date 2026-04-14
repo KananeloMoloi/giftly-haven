@@ -1,0 +1,181 @@
+export type Category = 'sweet-gifts' | 'salty-gifts' | 'jewelry' | 'outdoors' | 'study-snacks' | 'drinks';
+
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  longDescription: string;
+  price: number;
+  category: Category;
+  image: string;
+  contents: string[];
+  inStock: boolean;
+}
+
+export const categoryInfo: { id: Category; name: string; emoji: string }[] = [
+  { id: 'sweet-gifts', name: 'Sweet Gifts', emoji: '🍫' },
+  { id: 'salty-gifts', name: 'Salty Gifts', emoji: '🥨' },
+  { id: 'jewelry', name: 'Jewelry', emoji: '💎' },
+  { id: 'outdoors', name: 'Outdoors', emoji: '🏕️' },
+  { id: 'study-snacks', name: 'Study Snacks', emoji: '📚' },
+  { id: 'drinks', name: 'Drinks', emoji: '☕' },
+];
+
+// Images will be imported where used — these are placeholder paths
+// Replace with actual product photos for production
+export const products: Product[] = [
+  {
+    id: 'sweet-1',
+    name: 'Chocolate Indulgence Box',
+    description: 'A decadent assortment of premium Belgian chocolates and hand-rolled truffles.',
+    longDescription: 'Treat someone special to a luxurious selection of hand-picked Belgian chocolates. This beautifully presented box features milk, dark, and white chocolate truffles, caramel-filled bonbons, and crispy pralines — all nestled in a gold-lined gift box with a satin ribbon.',
+    price: 450,
+    category: 'sweet-gifts',
+    image: '/images/sweet-gifts.jpg',
+    contents: ['12 Belgian Truffles', '6 Caramel Bonbons', '4 Praline Squares', 'Gold Gift Box', 'Satin Ribbon'],
+    inStock: true,
+  },
+  {
+    id: 'sweet-2',
+    name: 'Sweet Celebration Hamper',
+    description: 'Cookies, marshmallows, fudge, and more for the ultimate sweet tooth.',
+    longDescription: 'This cheerful hamper is packed with artisan cookies, fluffy marshmallows, creamy fudge slabs, and colourful candy canes. Perfect for birthdays, celebrations, or just because. Wrapped in a rustic wicker basket with a hand-tied bow.',
+    price: 380,
+    category: 'sweet-gifts',
+    image: '/images/sweet-gifts.jpg',
+    contents: ['Artisan Butter Cookies', 'Vanilla Marshmallows', 'Salted Caramel Fudge', 'Candy Canes', 'Wicker Basket'],
+    inStock: true,
+  },
+  {
+    id: 'sweet-3',
+    name: 'Artisan Candy Collection',
+    description: 'Hand-crafted sweets from local confectioners in a vintage tin.',
+    longDescription: 'A nostalgic journey through flavour — each candy in this collection is hand-crafted by local artisans using traditional methods. From tangy fruit drops to creamy toffees, this vintage tin makes a charming gift for any occasion.',
+    price: 280,
+    category: 'sweet-gifts',
+    image: '/images/sweet-gifts.jpg',
+    contents: ['Fruit Drops', 'Butter Toffees', 'Mint Humbugs', 'Lemon Sherbets', 'Vintage Tin'],
+    inStock: true,
+  },
+  {
+    id: 'salty-1',
+    name: 'Savory Snack Crate',
+    description: 'A hearty wooden crate filled with premium nuts, biltong, and crackers.',
+    longDescription: 'This rustic crate is loaded with the finest savoury snacks — roasted macadamias, spiced cashews, artisan seed crackers, and a generous portion of air-dried biltong. A perfect gift for the man in your life or any snack enthusiast.',
+    price: 520,
+    category: 'salty-gifts',
+    image: '/images/salty-gifts.jpg',
+    contents: ['Roasted Macadamias', 'Spiced Cashews', 'Seed Crackers', 'Premium Biltong', 'Wooden Crate'],
+    inStock: true,
+  },
+  {
+    id: 'salty-2',
+    name: 'Gourmet Biltong Box',
+    description: 'South African biltong, droëwors, and chilli bites in a leather-look box.',
+    longDescription: 'A proudly South African gift box featuring hand-sliced biltong in three flavours — original, peri-peri, and garlic — alongside traditional droëwors and fiery chilli bites. Presented in a stylish leather-look box.',
+    price: 420,
+    category: 'salty-gifts',
+    image: '/images/salty-gifts.jpg',
+    contents: ['Original Biltong 200g', 'Peri-Peri Biltong 150g', 'Garlic Biltong 150g', 'Droëwors 200g', 'Chilli Bites 100g'],
+    inStock: true,
+  },
+  {
+    id: 'jewelry-1',
+    name: 'Golden Elegance Set',
+    description: 'A stunning gold-plated necklace, bracelet, and earring set.',
+    longDescription: 'Make a statement with this exquisite gold-plated jewellery set. The delicate chain necklace features a teardrop pendant, complemented by a matching bracelet and stud earrings. Presented in a velvet-lined jewellery box — ready to gift.',
+    price: 950,
+    category: 'jewelry',
+    image: '/images/jewelry.jpg',
+    contents: ['Gold-Plated Necklace', 'Matching Bracelet', 'Stud Earrings', 'Velvet Jewellery Box', 'Polishing Cloth'],
+    inStock: true,
+  },
+  {
+    id: 'jewelry-2',
+    name: 'Pearl Drop Earrings',
+    description: 'Elegant freshwater pearl earrings in a premium gift box.',
+    longDescription: 'These timeless freshwater pearl drop earrings add a touch of sophistication to any outfit. Set in sterling silver with a secure butterfly clasp, they come in a premium magnetic-close gift box with a certificate of authenticity.',
+    price: 680,
+    category: 'jewelry',
+    image: '/images/jewelry.jpg',
+    contents: ['Freshwater Pearl Earrings', 'Sterling Silver Setting', 'Magnetic Gift Box', 'Authenticity Certificate'],
+    inStock: true,
+  },
+  {
+    id: 'outdoor-1',
+    name: 'Adventure Starter Kit',
+    description: 'Everything you need for your next outdoor escape.',
+    longDescription: 'Whether it is a weekend hike or a camping trip, this kit has you covered. Includes a stainless steel water bottle, LED headlamp, compass, emergency whistle, and a pouch of premium trail mix — all packed in a durable canvas bag.',
+    price: 750,
+    category: 'outdoors',
+    image: '/images/outdoors.jpg',
+    contents: ['Stainless Steel Water Bottle', 'LED Headlamp', 'Brass Compass', 'Emergency Whistle', 'Trail Mix 250g', 'Canvas Bag'],
+    inStock: true,
+  },
+  {
+    id: 'outdoor-2',
+    name: 'Braai Master Pack',
+    description: 'Premium braai essentials for the grill enthusiast.',
+    longDescription: 'For the braai king or queen — this pack includes stainless steel braai tongs, a set of artisan spice rubs, a quality canvas apron, and eco-friendly firelighters. Presented in a branded cardboard box.',
+    price: 620,
+    category: 'outdoors',
+    image: '/images/outdoors.jpg',
+    contents: ['Stainless Steel Tongs', '3 Spice Rubs', 'Canvas Apron', 'Eco Firelighters', 'Recipe Cards'],
+    inStock: true,
+  },
+  {
+    id: 'study-1',
+    name: 'Exam Survival Kit',
+    description: 'Fuel those late-night study sessions with this energy-packed kit.',
+    longDescription: 'Designed for students burning the midnight oil — this kit includes energy bars, premium coffee sachets, roasted almonds, peppermints, and a motivational notepad. Packed in a cheerful box with a "You Got This" message.',
+    price: 320,
+    category: 'study-snacks',
+    image: '/images/study-snacks.jpg',
+    contents: ['6 Energy Bars', '10 Coffee Sachets', 'Roasted Almonds 200g', 'Peppermints', 'Motivational Notepad'],
+    inStock: true,
+  },
+  {
+    id: 'study-2',
+    name: 'Brain Fuel Bundle',
+    description: 'Dark chocolate, dried fruit, green tea, and granola to power your mind.',
+    longDescription: 'Keep your brain sharp with this curated bundle of brain-boosting snacks. Includes 70% dark chocolate, antioxidant-rich dried berries, Japanese green tea sachets, and crunchy homemade granola. All packed in a reusable mason jar.',
+    price: 290,
+    category: 'study-snacks',
+    image: '/images/study-snacks.jpg',
+    contents: ['70% Dark Chocolate Bar', 'Dried Berry Mix', '8 Green Tea Sachets', 'Homemade Granola', 'Mason Jar'],
+    inStock: true,
+  },
+  {
+    id: 'drinks-1',
+    name: 'Craft Coffee Collection',
+    description: 'Single-origin beans, a French press, and a handmade ceramic mug.',
+    longDescription: 'For the coffee connoisseur — this collection features 250g of single-origin Ethiopian coffee beans, a compact glass French press, and a beautifully handmade ceramic mug. All presented in a linen-wrapped gift box.',
+    price: 580,
+    category: 'drinks',
+    image: '/images/drinks.jpg',
+    contents: ['Ethiopian Coffee Beans 250g', 'Glass French Press', 'Handmade Ceramic Mug', 'Linen Gift Box'],
+    inStock: true,
+  },
+  {
+    id: 'drinks-2',
+    name: 'Tea Lover\'s Hamper',
+    description: 'A curated selection of premium loose-leaf teas with honey and a teacup.',
+    longDescription: 'Unwind with this elegant tea hamper featuring five varieties of premium loose-leaf tea — Earl Grey, Chamomile, Rooibos, Jasmine Green, and English Breakfast. Accompanied by a jar of raw honey and a porcelain teacup with saucer.',
+    price: 490,
+    category: 'drinks',
+    image: '/images/drinks.jpg',
+    contents: ['5 Loose-Leaf Teas', 'Raw Honey Jar', 'Porcelain Teacup & Saucer', 'Bamboo Tea Strainer', 'Gift Box'],
+    inStock: true,
+  },
+  {
+    id: 'drinks-3',
+    name: 'Smoothie Starter Set',
+    description: 'Superfood powders, a shaker bottle, and dried fruits for healthy blends.',
+    longDescription: 'Kickstart a healthy habit with this vibrant smoothie set. Includes sachets of spirulina, acai, and matcha powder, a BPA-free shaker bottle, and a mix of freeze-dried fruits. Perfect for fitness lovers and health-conscious friends.',
+    price: 410,
+    category: 'drinks',
+    image: '/images/drinks.jpg',
+    contents: ['Spirulina Powder', 'Acai Powder', 'Matcha Powder', 'Shaker Bottle', 'Freeze-Dried Fruit Mix'],
+    inStock: true,
+  },
+];
