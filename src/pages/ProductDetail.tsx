@@ -2,11 +2,12 @@ import React, { useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShoppingCart, ArrowLeft, Check } from 'lucide-react';
 import Layout from '@/components/Layout';
-import { products } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
 import { useCart } from '@/contexts/CartContext';
 
 const ProductDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { products } = useProducts();
   const product = products.find(p => p.id === id);
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);

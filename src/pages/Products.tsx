@@ -2,16 +2,18 @@ import React, { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import ProductCard from '@/components/ProductCard';
-import { products, categoryInfo, Category } from '@/data/products';
+import { categoryInfo, Category } from '@/data/products';
+import { useProducts } from '@/hooks/useProducts';
 
 const Products: React.FC = () => {
   const [searchParams] = useSearchParams();
   const activeCategory = searchParams.get('category') as Category | null;
+  const { products } = useProducts();
 
   const filtered = useMemo(() => {
     if (!activeCategory) return products;
     return products.filter(p => p.category === activeCategory);
-  }, [activeCategory]);
+  }, [activeCategory, products]);
 
   const activeName = activeCategory
     ? categoryInfo.find(c => c.id === activeCategory)?.name ?? 'All Gifts'
