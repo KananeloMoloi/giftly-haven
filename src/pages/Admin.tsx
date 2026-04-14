@@ -206,22 +206,23 @@ const Admin: React.FC = () => {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-charcoal flex items-center justify-center px-6">
-        <div className="w-full max-w-sm bg-card rounded-xl border border-border p-8">
-          <div className="flex items-center justify-center gap-2 mb-6">
-            <Lock size={20} className="text-gold" />
-            <h1 className="font-display text-xl font-bold">Admin Access</h1>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-6">
+        <div className="w-full max-w-sm bg-slate-800/80 backdrop-blur-sm rounded-xl border border-slate-700 p-8 shadow-2xl">
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <Lock size={20} className="text-emerald-400" />
+            <h1 className="font-display text-xl font-bold text-white">Admin Access</h1>
           </div>
+          <p className="text-center text-slate-400 text-sm mb-6">GiftBox Management Panel</p>
           <form onSubmit={handleLogin} className="space-y-4">
             <input
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Enter admin password"
-              className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full px-4 py-2.5 rounded-lg border border-slate-600 bg-slate-900/50 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
-            {error && <p className="text-destructive text-sm">{error}</p>}
-            <button type="submit" className="w-full bg-gold text-primary-foreground font-semibold py-2.5 rounded-full hover:bg-gold-dark transition-colors">
+            {error && <p className="text-red-400 text-sm">{error}</p>}
+            <button type="submit" className="w-full bg-emerald-500 text-white font-semibold py-2.5 rounded-full hover:bg-emerald-600 transition-colors">
               Login
             </button>
           </form>
@@ -231,11 +232,16 @@ const Admin: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="bg-charcoal text-nav py-4 px-6">
+    <div className="min-h-screen bg-slate-900">
+      <div className="bg-slate-800 border-b border-slate-700 py-4 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <h1 className="font-display text-lg font-semibold text-gold">GiftBox Admin</h1>
-          <button onClick={() => setAuthenticated(false)} className="text-sm text-nav opacity-70 hover:opacity-100 transition-opacity">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+              <Package size={16} className="text-emerald-400" />
+            </div>
+            <h1 className="font-display text-lg font-semibold text-white">GiftBox <span className="text-emerald-400">Admin</span></h1>
+          </div>
+          <button onClick={() => setAuthenticated(false)} className="text-sm text-slate-400 hover:text-white transition-colors">
             Logout
           </button>
         </div>
