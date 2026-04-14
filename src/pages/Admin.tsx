@@ -1,24 +1,60 @@
-import React, { useState } from 'react';
-import { Lock, Package, Truck, CheckCircle, Plus, Pencil, Trash2, X, Save } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Lock, Truck, CheckCircle, Plus, Pencil, Trash2, X, Save, Upload, Image, ChevronDown, ChevronUp, Package, Clock, MapPin, Phone, User, Camera } from 'lucide-react';
 import { useProducts } from '@/hooks/useProducts';
 import { Category, categoryInfo, Product } from '@/data/products';
 
 const ADMIN_PASSWORD = 'giftbox2024';
 
-interface MockOrder {
+type OrderStage = 'confirmed' | 'processing' | 'out-for-delivery' | 'delivered';
+const ORDER_STAGES: { key: OrderStage; label: string; icon: React.ReactNode }[] = [
+  { key: 'confirmed', label: 'Order Confirmed', icon: <CheckCircle size={16} /> },
+  { key: 'processing', label: 'Packing & Processing', icon: <Package size={16} /> },
+  { key: 'out-for-delivery', label: 'Out for Delivery', icon: <Truck size={16} /> },
+  { key: 'delivered', label: 'Delivered', icon: <CheckCircle size={16} /> },
+];
+
+interface AdminOrder {
   id: string;
   customer: string;
+  email: string;
+  phone: string;
   items: string[];
   total: number;
-  status: 'awaiting' | 'delivered';
+  status: OrderStage;
   date: string;
   expectedDelivery: string;
+  deliveryAddress: {
+    name: string;
+    street: string;
+    city: string;
+    postalCode: string;
+  };
+  deliveryTo: 'self' | 'other';
+  proofPhoto?: string;
 }
 
-const mockOrders: MockOrder[] = [
-  { id: 'ORD-001', customer: 'Thabo M.', items: ['Chocolate Indulgence Box', 'Tea Lover\'s Hamper'], total: 940, status: 'awaiting', date: '2026-04-12', expectedDelivery: '2026-04-15' },
-  { id: 'ORD-002', customer: 'Naledi K.', items: ['Golden Elegance Set'], total: 950, status: 'delivered', date: '2026-04-10', expectedDelivery: '2026-04-13' },
-  { id: 'ORD-003', customer: 'James R.', items: ['Savory Snack Crate', 'Exam Survival Kit'], total: 840, status: 'awaiting', date: '2026-04-13', expectedDelivery: '2026-04-16' },
+const mockOrders: AdminOrder[] = [
+  {
+    id: 'ORD-001', customer: 'Thabo M.', email: 'thabo@email.com', phone: '+27 82 345 6789',
+    items: ['Chocolate Indulgence Box', 'Tea Lover\'s Hamper'], total: 940, status: 'confirmed',
+    date: '2026-04-12', expectedDelivery: '2026-04-15',
+    deliveryAddress: { name: 'Thabo Mokoena', street: '12 Nelson Mandela Drive', city: 'Johannesburg', postalCode: '2001' },
+    deliveryTo: 'self',
+  },
+  {
+    id: 'ORD-002', customer: 'Naledi K.', email: 'naledi@email.com', phone: '+27 71 234 5678',
+    items: ['Golden Elegance Set'], total: 950, status: 'delivered',
+    date: '2026-04-10', expectedDelivery: '2026-04-13',
+    deliveryAddress: { name: 'Sipho Khumalo', street: '45 Church Street', city: 'Pretoria', postalCode: '0002' },
+    deliveryTo: 'other',
+  },
+  {
+    id: 'ORD-003', customer: 'James R.', email: 'james@email.com', phone: '+27 63 987 6543',
+    items: ['Savory Snack Crate', 'Exam Survival Kit'], total: 840, status: 'processing',
+    date: '2026-04-13', expectedDelivery: '2026-04-16',
+    deliveryAddress: { name: 'James Roux', street: '8 Long Street', city: 'Cape Town', postalCode: '8001' },
+    deliveryTo: 'self',
+  },
 ];
 
 const emptyForm = {
@@ -38,13 +74,17 @@ const Admin: React.FC = () => {
   const [error, setError] = useState('');
   const [tab, setTab] = useState<'orders' | 'products'>('orders');
   const [orders, setOrders] = useState(mockOrders);
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const { products, addProduct, updateProduct, deleteProduct } = useProducts();
 
   // Product form state
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const proofInputRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,12 +96,40 @@ const Admin: React.FC = () => {
     }
   };
 
-  const toggleOrderStatus = (id: string) => {
-    setOrders(prev => prev.map(o => o.id === id ? { ...o, status: o.status === 'awaiting' ? 'delivered' : 'awaiting' } : o));
+  const advanceOrderStatus = (id: string) => {
+    setOrders(prev => prev.map(o => {
+      if (o.id !== id) return o;
+      const currentIdx = ORDER_STAGES.findIndex(s => s.key === o.status);
+      if (currentIdx < ORDER_STAGES.length - 1) {
+        return { ...o, status: ORDER_STAGES[currentIdx + 1].key };
+      }
+      return o;
+    }));
+  };
+
+  const revertOrderStatus = (id: string) => {
+    setOrders(prev => prev.map(o => {
+      if (o.id !== id) return o;
+      const currentIdx = ORDER_STAGES.findIndex(s => s.key === o.status);
+      if (currentIdx > 0) {
+        return { ...o, status: ORDER_STAGES[currentIdx - 1].key };
+      }
+      return o;
+    }));
+  };
+
+  const handleProofUpload = (orderId: string, file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result as string;
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, proofPhoto: result } : o));
+    };
+    reader.readAsDataURL(file);
   };
 
   const openAddForm = () => {
     setForm(emptyForm);
+    setImagePreview(null);
     setEditingId(null);
     setShowForm(true);
   };
@@ -77,8 +145,21 @@ const Admin: React.FC = () => {
       contents: product.contents.join(', '),
       inStock: product.inStock,
     });
+    setImagePreview(product.image);
     setEditingId(product.id);
     setShowForm(true);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      setImagePreview(result);
+      setForm(prev => ({ ...prev, image: result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -102,6 +183,7 @@ const Admin: React.FC = () => {
     setShowForm(false);
     setEditingId(null);
     setForm(emptyForm);
+    setImagePreview(null);
   };
 
   const handleDelete = (id: string) => {
@@ -110,6 +192,17 @@ const Admin: React.FC = () => {
   };
 
   const updateField = (field: string, value: string | boolean) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const getStageIndex = (status: OrderStage) => ORDER_STAGES.findIndex(s => s.key === status);
+
+  const getStatusColor = (status: OrderStage) => {
+    switch (status) {
+      case 'confirmed': return 'bg-blue-500/10 text-blue-500';
+      case 'processing': return 'bg-gold/10 text-gold';
+      case 'out-for-delivery': return 'bg-orange-500/10 text-orange-500';
+      case 'delivered': return 'bg-accent/10 text-accent';
+    }
+  };
 
   if (!authenticated) {
     return (
@@ -165,45 +258,167 @@ const Admin: React.FC = () => {
           </button>
         </div>
 
-        {/* Orders Tab */}
+        {/* ======== ORDERS TAB ======== */}
         {tab === 'orders' && (
           <div className="space-y-4">
             <h2 className="font-display text-2xl font-bold mb-4">Recent Orders</h2>
-            {orders.map(order => (
-              <div key={order.id} className="bg-card rounded-lg border border-border p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <p className="font-semibold">{order.id}</p>
-                    <p className="text-sm text-muted-foreground">{order.customer} — {order.date}</p>
-                  </div>
-                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-                    order.status === 'delivered' ? 'bg-accent/10 text-accent' : 'bg-gold/10 text-gold'
-                  }`}>
-                    {order.status === 'delivered' ? <CheckCircle size={12} /> : <Truck size={12} />}
-                    {order.status === 'delivered' ? 'Delivered' : 'Awaiting Delivery'}
-                  </span>
+            {orders.map(order => {
+              const isExpanded = expandedOrder === order.id;
+              const stageIdx = getStageIndex(order.status);
+
+              return (
+                <div key={order.id} className="bg-card rounded-lg border border-border overflow-hidden">
+                  {/* Order header — click to expand */}
+                  <button
+                    onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                    className="w-full p-5 text-left hover:bg-secondary/30 transition-colors"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-semibold">{order.id}</p>
+                        <p className="text-sm text-muted-foreground">{order.customer} — {order.date}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{order.items.join(', ')}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                          {ORDER_STAGES[stageIdx].icon}
+                          {ORDER_STAGES[stageIdx].label}
+                        </span>
+                        <span className="font-display font-bold text-gold">R{order.total.toFixed(2)}</span>
+                        {isExpanded ? <ChevronUp size={18} className="text-muted-foreground" /> : <ChevronDown size={18} className="text-muted-foreground" />}
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Expanded details */}
+                  {isExpanded && (
+                    <div className="border-t border-border p-5 space-y-6 animate-fade-in">
+                      {/* Delivery Details */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-sm flex items-center gap-2">
+                            <User size={14} className="text-gold" /> Customer Details
+                          </h4>
+                          <div className="bg-secondary/30 rounded-lg p-4 space-y-2 text-sm">
+                            <p><span className="text-muted-foreground">Name:</span> {order.customer}</p>
+                            <p className="flex items-center gap-1"><span className="text-muted-foreground">Email:</span> {order.email}</p>
+                            <p className="flex items-center gap-1"><Phone size={12} className="text-muted-foreground" /> {order.phone}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {order.deliveryTo === 'self' ? '📦 Delivering to themselves' : '🎁 Gift for someone else'}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-3">
+                          <h4 className="font-semibold text-sm flex items-center gap-2">
+                            <MapPin size={14} className="text-gold" /> Delivery Address
+                          </h4>
+                          <div className="bg-secondary/30 rounded-lg p-4 space-y-1 text-sm">
+                            <p className="font-medium">{order.deliveryAddress.name}</p>
+                            <p className="text-muted-foreground">{order.deliveryAddress.street}</p>
+                            <p className="text-muted-foreground">{order.deliveryAddress.city}, {order.deliveryAddress.postalCode}</p>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock size={14} className="text-gold" />
+                            <span className="text-muted-foreground">Expected: </span>
+                            <span className="font-medium">{order.expectedDelivery}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 4-Stage Progress */}
+                      <div>
+                        <h4 className="font-semibold text-sm mb-4">Order Progress</h4>
+                        <div className="flex items-center gap-1">
+                          {ORDER_STAGES.map((stage, idx) => {
+                            const isComplete = idx <= stageIdx;
+                            const isCurrent = idx === stageIdx;
+                            return (
+                              <React.Fragment key={stage.key}>
+                                <div className={`flex flex-col items-center gap-1.5 flex-1`}>
+                                  <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                                    isComplete
+                                      ? isCurrent ? 'bg-gold text-primary-foreground ring-2 ring-gold/30' : 'bg-gold/80 text-primary-foreground'
+                                      : 'bg-secondary text-muted-foreground'
+                                  }`}>
+                                    {stage.icon}
+                                  </div>
+                                  <span className={`text-[10px] text-center leading-tight ${isCurrent ? 'font-semibold' : 'text-muted-foreground'}`}>
+                                    {stage.label}
+                                  </span>
+                                </div>
+                                {idx < ORDER_STAGES.length - 1 && (
+                                  <div className={`h-0.5 flex-1 mt-[-20px] rounded ${idx < stageIdx ? 'bg-gold' : 'bg-secondary'}`} />
+                                )}
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Status controls */}
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          onClick={() => revertOrderStatus(order.id)}
+                          disabled={stageIdx === 0}
+                          className="px-4 py-2 rounded-full border border-border text-sm font-medium hover:border-gold transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          ← Previous Stage
+                        </button>
+                        <button
+                          onClick={() => advanceOrderStatus(order.id)}
+                          disabled={stageIdx === ORDER_STAGES.length - 1}
+                          className="px-4 py-2 rounded-full bg-gold text-primary-foreground text-sm font-medium hover:bg-gold-dark transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          Advance to Next Stage →
+                        </button>
+                      </div>
+
+                      {/* Proof of delivery photo */}
+                      <div>
+                        <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                          <Camera size={14} className="text-gold" /> Proof of Delivery
+                        </h4>
+                        {order.proofPhoto ? (
+                          <div className="space-y-2">
+                            <img src={order.proofPhoto} alt="Delivery proof" className="w-full max-w-sm rounded-lg border border-border" />
+                            <button
+                              onClick={() => setOrders(prev => prev.map(o => o.id === order.id ? { ...o, proofPhoto: undefined } : o))}
+                              className="text-xs text-destructive hover:underline"
+                            >
+                              Remove photo
+                            </button>
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              ref={proofInputRef}
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) handleProofUpload(order.id, file);
+                              }}
+                            />
+                            <button
+                              onClick={() => proofInputRef.current?.click()}
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-border hover:border-gold text-sm text-muted-foreground hover:text-foreground transition-colors"
+                            >
+                              <Upload size={16} />
+                              Upload delivery photo
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="text-sm text-muted-foreground mb-3">
-                  {order.items.join(', ')}
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="font-display font-bold text-gold">R{order.total.toFixed(2)}</p>
-                  <div className="flex items-center gap-3 text-sm">
-                    <span className="text-muted-foreground">Expected: {order.expectedDelivery}</span>
-                    <button
-                      onClick={() => toggleOrderStatus(order.id)}
-                      className="px-3 py-1 rounded-full border border-border text-sm font-medium hover:border-gold hover:text-gold transition-colors"
-                    >
-                      {order.status === 'awaiting' ? 'Mark Delivered' : 'Mark Awaiting'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
 
-        {/* Products Tab */}
+        {/* ======== PRODUCTS TAB ======== */}
         {tab === 'products' && (
           <div>
             <div className="flex items-center justify-between mb-6">
@@ -225,11 +440,53 @@ const Admin: React.FC = () => {
                     <h3 className="font-display text-xl font-bold">
                       {editingId ? 'Edit Product' : 'Add New Product'}
                     </h3>
-                    <button onClick={() => { setShowForm(false); setEditingId(null); }} className="text-muted-foreground hover:text-foreground">
+                    <button onClick={() => { setShowForm(false); setEditingId(null); setImagePreview(null); }} className="text-muted-foreground hover:text-foreground">
                       <X size={20} />
                     </button>
                   </div>
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Image Upload */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Product Image</label>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageUpload}
+                      />
+                      {imagePreview ? (
+                        <div className="relative group">
+                          <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover rounded-lg border border-border" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="px-4 py-2 bg-card rounded-full text-sm font-medium"
+                            >
+                              Change
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => { setImagePreview(null); setForm(prev => ({ ...prev, image: '' })); }}
+                              className="px-4 py-2 bg-destructive text-destructive-foreground rounded-full text-sm font-medium"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="w-full h-48 rounded-lg border-2 border-dashed border-border hover:border-gold flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          <Image size={32} />
+                          <span className="text-sm font-medium">Click to upload image</span>
+                          <span className="text-xs">Supports JPG, PNG, WEBP, GIF, SVG</span>
+                        </button>
+                      )}
+                    </div>
                     <div>
                       <label className="block text-sm font-medium mb-1">Product Name *</label>
                       <input
@@ -297,16 +554,6 @@ const Admin: React.FC = () => {
                         placeholder="Item 1, Item 2, Item 3"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Image URL (optional)</label>
-                      <input
-                        type="text"
-                        value={form.image}
-                        onChange={e => updateField('image', e.target.value)}
-                        className="w-full px-4 py-2.5 rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                        placeholder="Leave empty to use category default image"
-                      />
-                    </div>
                     <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -320,7 +567,7 @@ const Admin: React.FC = () => {
                     <div className="flex gap-3 pt-2">
                       <button
                         type="button"
-                        onClick={() => { setShowForm(false); setEditingId(null); }}
+                        onClick={() => { setShowForm(false); setEditingId(null); setImagePreview(null); }}
                         className="px-6 py-2.5 rounded-full border border-border font-medium hover:border-gold transition-colors"
                       >
                         Cancel
