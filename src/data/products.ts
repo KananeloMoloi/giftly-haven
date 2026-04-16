@@ -12,13 +12,13 @@ export interface Product {
   inStock: boolean;
 }
 
-export const categoryInfo: { id: Category; name: string; emoji: string }[] = [
-  { id: 'sweet-gifts', name: 'Sweet Gifts', emoji: '🍫' },
-  { id: 'salty-gifts', name: 'Salty Gifts', emoji: '🥨' },
-  { id: 'jewelry', name: 'Jewelry', emoji: '💎' },
-  { id: 'outdoors', name: 'Outdoors', emoji: '🏕️' },
-  { id: 'study-snacks', name: 'Study Snacks', emoji: '📚' },
-  { id: 'drinks', name: 'Drinks', emoji: '☕' },
+export const categoryInfo: { id: Category; name: string; emoji: string; image: string }[] = [
+  { id: 'sweet-gifts', name: 'Sweet Gifts', emoji: '🍫', image: '/images/cat-sweet-gifts.jpg' },
+  { id: 'salty-gifts', name: 'Salty Gifts', emoji: '🥨', image: '/images/cat-salty-gifts.jpg' },
+  { id: 'jewelry', name: 'Jewelry', emoji: '💎', image: '/images/cat-jewelry.jpg' },
+  { id: 'outdoors', name: 'Outdoors', emoji: '🏕️', image: '/images/cat-outdoors.jpg' },
+  { id: 'study-snacks', name: 'Study Snacks', emoji: '📚', image: '/images/cat-study-snacks.jpg' },
+  { id: 'drinks', name: 'Drinks', emoji: '☕', image: '/images/cat-drinks.jpg' },
 ];
 
 // Images will be imported where used — these are placeholder paths

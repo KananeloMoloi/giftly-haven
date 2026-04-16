@@ -26,10 +26,22 @@ const Index: React.FC = () => {
               <Link
                 key={cat.id}
                 to={`/products?category=${cat.id}`}
-                className="flex flex-col items-center gap-3 p-6 bg-card rounded-lg border border-border hover:border-gold/40 hover:shadow-md transition-all group"
+                className="relative flex flex-col items-center rounded-lg overflow-hidden border border-border hover:border-gold/40 hover:shadow-md transition-all group"
               >
-                <span className="text-3xl group-hover:scale-110 transition-transform">{cat.emoji}</span>
-                <span className="text-sm font-medium text-foreground text-center">{cat.name}</span>
+                <div className="w-full aspect-square overflow-hidden">
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    loading="lazy"
+                    width={512}
+                    height={512}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                </div>
+                <span className="absolute bottom-3 left-0 right-0 text-sm font-medium text-white text-center drop-shadow-lg">
+                  {cat.name}
+                </span>
               </Link>
             ))}
           </div>
