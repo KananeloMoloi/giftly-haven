@@ -47,13 +47,18 @@ const Products: React.FC = () => {
               <Link
                 key={cat.id}
                 to={`/products?category=${cat.id}`}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors border ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
                   activeCategory === cat.id
                     ? 'bg-gold text-primary-foreground border-gold'
                     : 'bg-card text-foreground border-border hover:border-gold/40'
                 }`}
               >
-                {cat.emoji} {cat.name}
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="w-6 h-6 rounded-full object-cover"
+                />
+                {cat.name}
               </Link>
             ))}
           </div>
