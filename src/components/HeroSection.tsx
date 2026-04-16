@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
-import heroVideo from '@/assets/hero-video.mp4.asset.json';
+import heroImage from '@/assets/hero.jpg';
 
 const HeroSection: React.FC = () => {
   const [opacity, setOpacity] = useState(1);
@@ -17,18 +17,19 @@ const HeroSection: React.FC = () => {
 
   return (
     <div className="relative h-screen">
-      {/* Fixed background with video */}
+      {/* Fixed background with animation */}
       <div className="fixed inset-0 -z-10" style={{ opacity }}>
-        <div className="absolute inset-0">
-          <video
-            src={heroVideo.url}
-            autoPlay
-            muted
-            loop
-            playsInline
+        <div className="absolute inset-0 animate-hero-zoom">
+          <img
+            src={heroImage}
+            alt="Premium gift boxes"
             className="w-full h-full object-cover"
+            width={1920}
+            height={1080}
           />
         </div>
+        {/* Animated shimmer overlay */}
+        <div className="absolute inset-0 animate-hero-shimmer bg-gradient-to-r from-transparent via-gold/5 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/50 via-foreground/40 to-foreground/80" />
       </div>
 
