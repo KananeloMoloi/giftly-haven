@@ -84,22 +84,22 @@ const About: React.FC = () => {
                     </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="space-y-2">
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="space-y-1.5">
                       <Label htmlFor="name">Full Name</Label>
                       <Input id="name" name="name" placeholder="Your name" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="email">Email Address</Label>
                       <Input id="email" name="email" type="email" placeholder="you@example.com" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="subject">Subject</Label>
                       <Input id="subject" name="subject" placeholder="What is this about?" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="message">Message</Label>
-                      <Textarea id="message" name="message" placeholder="Write your message, suggestion, or question here..." rows={5} required />
+                      <Textarea id="message" name="message" placeholder="Write your message, suggestion, or question here..." rows={4} required />
                     </div>
                     <Button
                       type="submit"
