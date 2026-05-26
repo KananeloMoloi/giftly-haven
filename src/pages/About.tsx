@@ -61,9 +61,9 @@ const About: React.FC = () => {
           </div>
 
           {/* Form + Video Section */}
-          <section className="mb-16">
-            <h2 className="font-display text-2xl font-bold mb-8">Get In Touch</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          <section className="mb-12">
+            <h2 className="font-display text-2xl font-bold mb-6 text-center">Get In Touch</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-5xl mx-auto">
               {/* Contact Form */}
               <div className="bg-card border border-border rounded-xl p-6 md:p-8">
                 {submitted ? (
