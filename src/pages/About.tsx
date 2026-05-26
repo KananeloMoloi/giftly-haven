@@ -61,13 +61,13 @@ const About: React.FC = () => {
           </div>
 
           {/* Form + Video Section */}
-          <section className="mb-16">
-            <h2 className="font-display text-2xl font-bold mb-8">Get In Touch</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          <section className="mb-12">
+            <h2 className="font-display text-2xl font-bold mb-6 text-center">Get In Touch</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-5xl mx-auto">
               {/* Contact Form */}
-              <div className="bg-card border border-border rounded-xl p-6 md:p-8">
+              <div className="bg-card border border-border rounded-xl p-5 md:p-6">
                 {submitted ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center gap-4 animate-fade-in-up">
+                  <div className="flex flex-col items-center justify-center text-center gap-3 py-6 animate-fade-in-up">
                     <div className="w-16 h-16 rounded-full bg-gold/15 flex items-center justify-center">
                       <Gift className="text-gold" size={32} />
                     </div>
@@ -84,22 +84,22 @@ const About: React.FC = () => {
                     </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div className="space-y-2">
+                  <form onSubmit={handleSubmit} className="space-y-3">
+                    <div className="space-y-1.5">
                       <Label htmlFor="name">Full Name</Label>
                       <Input id="name" name="name" placeholder="Your name" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="email">Email Address</Label>
                       <Input id="email" name="email" type="email" placeholder="you@example.com" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="subject">Subject</Label>
                       <Input id="subject" name="subject" placeholder="What is this about?" required />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="message">Message</Label>
-                      <Textarea id="message" name="message" placeholder="Write your message, suggestion, or question here..." rows={5} required />
+                      <Textarea id="message" name="message" placeholder="Write your message, suggestion, or question here..." rows={4} required />
                     </div>
                     <Button
                       type="submit"
@@ -117,11 +117,11 @@ const About: React.FC = () => {
               </div>
 
               {/* Image */}
-              <div className="rounded-xl overflow-hidden border border-border bg-card">
+              <div className="rounded-xl overflow-hidden border border-border bg-card flex items-center justify-center p-3">
                 <img
                   src="/images/about-dyngifts.png"
                   alt="DynGifts profile and featured gift boxes"
-                  className="w-full h-full object-contain min-h-[400px] bg-background"
+                  className="w-full h-auto object-contain max-h-[460px]"
                 />
               </div>
             </div>
