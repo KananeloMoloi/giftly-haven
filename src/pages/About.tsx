@@ -65,9 +65,9 @@ const About: React.FC = () => {
             <h2 className="font-display text-2xl font-bold mb-6 text-center">Get In Touch</h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center max-w-5xl mx-auto">
               {/* Contact Form */}
-              <div className="bg-card border border-border rounded-xl p-6 md:p-8">
+              <div className="bg-card border border-border rounded-xl p-5 md:p-6">
                 {submitted ? (
-                  <div className="flex flex-col items-center justify-center h-full text-center gap-4 animate-fade-in-up">
+                  <div className="flex flex-col items-center justify-center text-center gap-3 py-6 animate-fade-in-up">
                     <div className="w-16 h-16 rounded-full bg-gold/15 flex items-center justify-center">
                       <Gift className="text-gold" size={32} />
                     </div>
