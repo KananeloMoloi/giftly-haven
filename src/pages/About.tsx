@@ -116,15 +116,12 @@ const About: React.FC = () => {
                 )}
               </div>
 
-              {/* Video */}
+              {/* Image */}
               <div className="rounded-xl overflow-hidden border border-border bg-card">
-                <video
-                  src={aboutVideo.url}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover min-h-[400px]"
+                <img
+                  src="/images/about-dyngifts.png"
+                  alt="DynGifts profile and featured gift boxes"
+                  className="w-full h-full object-contain min-h-[400px] bg-background"
                 />
               </div>
             </div>
