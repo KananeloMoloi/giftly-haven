@@ -117,11 +117,11 @@ const About: React.FC = () => {
               </div>
 
               {/* Image */}
-              <div className="rounded-xl overflow-hidden border border-border bg-card">
+              <div className="rounded-xl overflow-hidden border border-border bg-card flex items-center justify-center p-3">
                 <img
                   src="/images/about-dyngifts.png"
                   alt="DynGifts profile and featured gift boxes"
-                  className="w-full h-full object-contain min-h-[400px] bg-background"
+                  className="w-full h-auto object-contain max-h-[460px]"
                 />
               </div>
             </div>
